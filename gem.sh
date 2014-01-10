@@ -1,10 +1,12 @@
 #!/bin/bash
-if [ ! -f `pwd`/gem.txt ]; then
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#echo "the dir is: $DIR"
+if [ ! -f "$DIR"/gem.txt ]; then
    echo "file not found"
-   python `pwd`/gem3.py > `pwd`/gem.txt
+   python "$DIR"/gem3.py > "$DIR"/gem.txt
 else
    #echo 'file found'
-   diffresult="$(diff `pwd`/gem.txt <(python `pwd`/gem3.py))"
+   diffresult="$(diff "$DIR"/gem.txt <(python "$DIR"/gem3.py))"
    #echo $diffresult
    if [ ! -z "$diffresult" ]; then
       #echo "GEM: new update!"
@@ -15,11 +17,13 @@ else
       TITLE=$subject
       MESSAGE="$diffresult"
       `which curl` \
-	-F "token=${API_KEY}" \
-	-F "user=${USER_KEY}" \
-	-F "title=${TITLE}" \
-	-F "message=${MESSAGE}" \
-       "${URL}" > /dev/null 2>&1
+        -F "token=${API_KEY}" \
+        -F "user=${USER_KEY}" \
+        -F "title=${TITLE}" \
+        -F "message=${MESSAGE}" \
+      "${URL}" > /dev/null 2>&1
+   echo "$diffresult" | mail -s "GEM update" EMAIL@DOMAIN.TLD
+   python "$DIR"/gem3.py > "$DIR"/gem.txt
    fi
    #echo "finished diff"
 fi

@@ -62,7 +62,7 @@ print
 ## graduate schools
 print "Graduate Schools:"
 schools = tree.xpath(".//*[@id='ctl00_ContentPlaceHolder1_pnlGraduateSchools']/table/tr")
-for school in schools[2:5]:
+for school in schools[2:]:
 	for schoo in school.xpath("./td/span/text()"):
 		print schoo,"\t",
 	print ""
